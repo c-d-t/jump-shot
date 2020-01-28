@@ -47,7 +47,7 @@ router.post('/leaveRoom', (req, res) => {
     try {
         const roomID = parseInt(req.body.roomID)
         leaveRoom({
-            clientID: req.body.clientID,
+            nickname: req.body.nickname,
             roomID: roomID
         })
         res.status(200).json({

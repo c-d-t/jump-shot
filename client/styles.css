@@ -127,30 +127,15 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 /**********/
 /** GAME **/
-#controller-container {
-    display: flex;
-    height: 100vh;
-    justify-content: flex-end;
-    align-items: center;
-}
-#jump-button {
-    color: rgb(85, 73, 73);
-    font-size: 3rem;
-    background-color: rgb(51, 45, 45);
-    width: 45%;
-    height: 100%;
-    border: none;
-}
 #joystick-container {
-    background-color: rgb(66, 61, 61);
-    width: 55%;
-    height: 100%;
-    position: relative;
+    margin: 100px auto;
+    width: 400px;
+    height: 400px;
 }
 #joystick-circle {
     background-color: rgb(76, 69, 69);
     height: 100%;
-    width: 85%;
+    width: 100%;
     margin: 0 auto;
     border-radius: 50%;
 }

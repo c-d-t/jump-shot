@@ -1,4 +1,4 @@
-const { createRoom, joinRoom, leaveRoom } = require("./rooms")
+const { leaveRoom, sendInput, getRooms } = require("./rooms")
 
 exports.initSockets = io => {
     io.on("connect", socket => {
@@ -12,15 +12,21 @@ exports.initSockets = io => {
         socket.on("joinRoom", data => {
             socket.roomID = data.roomID
             socket.nickname = data.nickname
-            socket.in(data.roomID).emit("clientJoined", data.nickname)
+            socket.in(data.roomID).emit("clientJoined", socket.nickname)
         })
         
-        socket.on("leaveRoom", data => {
-            
+        socket.on("leaveRoom", () => {
+            try {
+                socket.leave(socket.roomID)
+                socket.in(socket.roomID).emit("clientLeft", socket.nickname)    
+            }
+            catch(error) {
+                console.log(error)
+            }
         })
 
-        socket.on("sendInput", ({roomID, ...data}) => {
-            socket.to(roomID).emit("receiveInput", data)
+        socket.on("sendInput", input => {
+            sendInput(socket.roomID, socket.nickname, input)
         })
 
         socket.on("disconnect", () => {
@@ -29,10 +35,21 @@ exports.initSockets = io => {
             }
             try {
                 leaveRoom({nickname: socket.nickname, roomID: socket.roomID})
+                socket.in(socket.roomID).emit("clientLeft", socket.nickname)  
             }
             catch(error) {
                 console.log(error)
             }
         })
     })
+
+    setInterval(() => {
+        const rooms = getRooms()
+        if (rooms.length == 0) {
+            return
+        }
+        for (let i = 0; i < rooms.length; i++) {
+            io.in(rooms[i].id).emit("receiveInput", rooms[i].clients)
+        }
+    }, 50);
 }

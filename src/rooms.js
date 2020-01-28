@@ -8,7 +8,8 @@ module.exports = {
     joinRoom,
     leaveRoom,
     deleteRoom,
-    getRooms
+    getRooms,
+    sendInput,
 }
 
 function getRooms() {
@@ -21,7 +22,7 @@ function createRoom() {
     const newRoom = {
         id : id,
         inGame : false,
-        joined : []
+        clients : []
     }
 
     rooms.push(newRoom)
@@ -44,11 +45,17 @@ function joinRoom({nickname, roomID}) {
         throw new Error("Room is already in a game")
     }
 
-    if (foundRoom.joined.length >= MAX_USERS_IN_ROOM) {
+    if (foundRoom.clients.length >= MAX_USERS_IN_ROOM) {
         throw new Error("Room is full")
     }
 
-    foundRoom.joined.push(nickname)
+    foundRoom.clients.push({
+        nickname,
+        input: {
+            x: 0,
+            y: 0
+        }
+    })
 }
 
 function leaveRoom({nickname, roomID}) {
@@ -58,12 +65,14 @@ function leaveRoom({nickname, roomID}) {
         throw new Error("Room ID doesn't exist")
     }
 
-    if (!foundRoom.joined.includes(nickname)) {
+    const foundClient = foundRoom.clients.find(client => client.nickname === nickname)
+
+    if (!foundClient) {
         throw new Error("You need to be in the room to leave it")
     }
 
-    const clientIndex = foundRoom.joined.findIndex(client => client == nickname)
-    foundRoom.joined.splice(clientIndex, 1)
+    const clientIndex = foundRoom.clients.findIndex(client => client.nickname == nickname)
+    foundRoom.clients.splice(clientIndex, 1)
 }
 
 function deleteRoom(roomID) {
@@ -75,4 +84,20 @@ function deleteRoom(roomID) {
 
     const roomIndex = rooms.findIndex(room => room.id == roomID)
     rooms.splice(roomIndex, 1)
+}
+
+function sendInput(roomID, nickname, input) {
+    const foundRoom = rooms.find(room => roomID == room.id)
+
+    if (!foundRoom) {
+        throw new Error("Room ID doesn't exist")
+    }
+
+    const foundClient = foundRoom.clients.find(client => client.nickname === nickname)
+
+    if (!foundClient) {
+        throw new Error("You need to be in the room to send input")
+    }
+
+    foundClient.input = input
 }

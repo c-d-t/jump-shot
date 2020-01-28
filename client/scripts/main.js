@@ -10,7 +10,9 @@ $(document).ready(() => {
 
     "use strict"
 
-    const socket = io()
+    const socket = io.connect('192.168.2.10:3000')
+    let clientRoomID = 0
+    let clientNickname = ''
     let role = -1 // 0 = host, 1 = client
 
     /*************/
@@ -18,10 +20,8 @@ $(document).ready(() => {
 
     // host
     const game = new Game()
-    const engine = new Engine()
-
-    // client
-    const input = new Input()
+    const engine = new Engine(gameUpdate)
+    const input = new Input(sendInput)
 
 
     /***************/
@@ -33,15 +33,40 @@ $(document).ready(() => {
      * for every step
      */
     function gameUpdate() {
+        
+    }
 
+    function sendInput() {
+        socket.emit("sendInput", {
+            x: input.xAxis,
+            y: input.yAxis
+        })
+    }
+
+    function addController() {
+        $(document).on("touchstart", "#joystick-container", e => input.handleJoyStickDown(e))
+        $(document).on("touchend", "#joystick-container",   e => input.handleJoyStickUp(e))
+        $(document).on("touchmove", "#joystick-container",  e => input.handleJoyStick(e))
+        $(document).on("mousedown", "#joystick-container",  e => input.handleJoyStickDown(e))
+        $(document).on("mouseup", "#joystick-container",    e => input.handleJoyStickUp(e))
+        $(document).on("mousemove", "#joystick-container",  e => input.handleJoyStick(e))
+    }
+
+    function removeController() {
+        $(document).off("touchstart", e => input.handleJoyStickDown(e))
+        $(document).off("touchend",   e => input.handleJoyStickUp(e))
+        $(document).off("touchmove",  e => input.handleJoyStick(e))
+        $(document).off("mousedown",  e => input.handleJoyStickDown(e))
+        $(document).off("mouseup",    e => input.handleJoyStickUp(e))
+        $(document).off("mousemove",  e => input.handleJoyStick(e))
     }
 
 
-    /********************/
-    /** EVENT HANDLING **/
+    /*******************/
+    /** PAGE HANDLING **/
 
     function onMainMenu() {
-        $("#app").html($("#main-menu-template").html())
+        display.switchScreen($("#main-menu-template"))
     }
 
     function onHostGame() {
@@ -50,9 +75,11 @@ $(document).ready(() => {
             url: "http://localhost:3000/createRoom",
             dataType: "json",
             success: function (response) {
-                $("#app").html($("#host-lobby-screen-template").html())
+                display.switchScreen($("#host-lobby-screen-template"))
                 $("#room-code").html("ID: " + response.roomID)
                 socket.emit("hostConnect", response.roomID)
+                socket.on("receiveInput", input => {
+                })
             },
             error: function (error) {
                 display.errorMessage(error.responseJSON.message)
@@ -61,7 +88,7 @@ $(document).ready(() => {
     }
 
     function joinRoomButtonClick() {
-        $("#app").html($("#join-room-template").html())
+        display.switchScreen($("#join-room-template"))
         $("#nickname-input").focus()
     }
 
@@ -76,7 +103,10 @@ $(document).ready(() => {
             contentType: "application/json",
             data: JSON.stringify(data),
             success: function (response) {
-                $("#app").html($("#controller-template").html())
+                clientRoomID = roomID
+                clientNickname = nickname
+                addController()
+                display.switchScreen($("#controller-template"))
                 socket.emit("joinRoom", {roomID, nickname})
             },
             error: function (error) {
@@ -89,18 +119,36 @@ $(document).ready(() => {
 
     }
 
+    function onLeaveController() {
+        const data = { roomID: clientRoomID, nickname: clientNickname }
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:3000/leaveRoom",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (response) {
+                removeController()
+                display.switchScreen($("#main-menu-template"))
+                socket.emit("leaveRoom")
+            },
+            error: function (error) {
+                display.errorMessage(error.responseJSON.message)
+            }
+        })
+    }
+
 
     /****************/
     /** INITIALIZE **/
 
-    $(document).on("click", "#main-menu-button", onMainMenu         )
-    $(document).on("click", "#host-room-button", onHostGame         )
-    $(document).on("click", "#join-room-button", joinRoomButtonClick)
-    $(document).on("click", "#join-button",      onJoinRoom         )
+    $(document).on("click", "#main-menu-button",       onMainMenu         )
+    $(document).on("click", "#host-room-button",       onHostGame         )
+    $(document).on("click", "#join-room-button",       joinRoomButtonClick)
+    $(document).on("click", "#join-button",            onJoinRoom         )
+    $(document).on("click", "#exit-controller-button", onLeaveController  )
 
     onMainMenu()
-    $("#app").html($("#controller-template").html())
-
     
     /*************/
     /** SOCKETS **/
@@ -109,7 +157,7 @@ $(document).ready(() => {
         game.addPlayer(nickname)
     })
 
-    socket.on("clientLeft", data => {
-
+    socket.on("clientLeft", nickname => {
+        game.removePlayer(nickname)
     })
 })

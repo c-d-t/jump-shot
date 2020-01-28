@@ -1,5 +1,9 @@
 const display = {
 
+    switchScreen($template) {
+        $("#app").html($template.html())
+    },
+
     updatePlayerList: playerList => {
         if (playerList.length == 0) {
 
