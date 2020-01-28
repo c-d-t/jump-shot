@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css?family=Bangers|Varela+Round&display=swap');
+/* 'Bangers' 'Varela Round' */
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Varela Round', Arial, Helvetica, sans-serif;
+}
+body {
+    background-color: rgb(255, 254, 249);
+    overflow: hidden;
+}
+footer {
+    color: #fff;
+    font-size: 1rem;
+    line-height: 2rem;
+    text-align: center;
+    background-color: #000;
+    box-sizing: border-box;
+    width: 100%;
+    height: 3rem;
+    padding: 0.5rem;
+    position: absolute;
+    bottom: 0;
+}
+a {
+    color: orange;
+}
+input:focus, button:focus {
+    outline: none;
+}
+
+/**********/
+/** MENU **/
+#error-message {
+    font-size: 2rem;
+    color: rgb(255, 44, 44);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 10px);
+    display: none;
+}
+#title {
+    background: linear-gradient(#666, #000, rgb(202, 57, 0));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Bangers';
+    font-size: 4rem;
+    padding: 1rem;
+    margin-bottom: 4rem;
+}
+#main-menu-container {
+    height: 75vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.header {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+.back-button {
+    background-color: rgb(236, 236, 255);
+    width: 50px;
+    height: 50px;
+    border: 2px solid grey;
+    border-radius: 5px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 1;
+}
+.menu-button {
+    color: rgb(0, 0, 0);
+    font-family: 'Bangers';
+    font-size: 2rem;
+    background-image: linear-gradient(145deg, rgb(241, 86, 81), rgb(219, 137, 42));
+    box-sizing: border-box;
+    width: 10rem;
+    height: 4rem;
+    padding: 0.5rem;
+    margin: 0 0.5rem 2rem 0.5rem;
+    border: none;
+    border: 2px solid black;
+    border-radius: 5px;
+    transition: all 100ms linear;
+}
+.menu-button:hover {
+    transform: scale(1.05) rotate(2deg);
+}
+.menu-input {
+    font-size: 2rem;
+    text-align: center;
+    background-image: linear-gradient(5deg, rgb(241, 166, 81), rgb(219, 207, 42));
+    box-sizing: border-box;
+    height: 4rem;
+    width: 90%;
+    padding: 0.5rem 1rem;
+    margin-bottom: 2rem;
+    border: none;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+#room-code {
+    font-family: 'Bangers';
+    font-size: 2rem;
+    position: absolute;
+    top: 0;
+    right: 5px;
+}
+#player-list {
+    list-style: none;
+    text-align: center;
+    padding: 1rem 2rem;
+    border: 2px solid rgb(172, 154, 154);
+    border-radius: 5px;
+}
+#player-list > li {
+    margin: 1rem 0;
+}
+
+/**********/
+/** GAME **/
+#controller-container {
+    display: flex;
+    height: 100vh;
+    justify-content: flex-end;
+    align-items: center;
+}
+#jump-button {
+    color: rgb(85, 73, 73);
+    font-size: 3rem;
+    background-color: rgb(51, 45, 45);
+    width: 45%;
+    height: 100%;
+    border: none;
+}
+#joystick-container {
+    background-color: rgb(66, 61, 61);
+    width: 55%;
+    height: 100%;
+    position: relative;
+}
+#joystick-circle {
+    background-color: rgb(76, 69, 69);
+    height: 100%;
+    width: 85%;
+    margin: 0 auto;
+    border-radius: 50%;
+}
+#joystick-dial {
+    width: 70px;
+    height: 70px;
+    border: 2px solid black;
+    border-radius: 40px;
+    background-color: rgb(43, 33, 33);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

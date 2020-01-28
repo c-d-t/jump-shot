@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jump Shot</title>
+
+    <!-- LIBRARIES -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="error-message"></div>
+    <div id="app"></div>
+
+    <!-- TEMPLATES -->
+    <template id="main-menu-template">
+        <div id="main-menu-container">
+            <p id="title">Jump Shot</p>
+            <button id="join-room-button" class="menu-button">Join</button>
+            <button id="host-room-button" class="menu-button">Create</button>    
+        </div>
+        <footer>
+            Available on <a href="https://github.com/casey-tai/jump-shot">github!</a>
+        </footer>
+    </template>
+
+    <template id="host-game-screen-template">
+        <canvas id="game-canvas"></canvas>
+    </template>
+
+    <template id="host-lobby-screen-template">
+        <div id="main-menu-button" class="back-button"><</div>
+        <div id="main-menu-container">
+            <p id="room-code"></p>
+            <ul id="player-list"></ul>
+        </div>
+    </template>
+
+    <template id="join-room-template">
+        <div id="main-menu-button" class="back-button"><</div>
+        <div id="main-menu-container">
+            <p class="header">Join Room</p>
+            <input id="nickname-input" class="menu-input" type="input" placeholder="Nickname" autocomplete="off">
+            <input id="room-id-input" class="menu-input" type="number" pattern="[0-9]*"  placeholder="Room ID" autocomplete="off">
+            <button id="join-button" class="menu-button">Join</button>    
+        </div>
+    </template>
+
+    <template id="controller-template">
+        <div id="exit-controller-button" class="back-button"><</div>
+        <div id="controller-container">
+            <div id="joystick-container">
+                <div id="joystick-circle"></div>
+                <div id="joystick-dial"></div>
+            </div>
+            <button id="jump-button">Jump</button>    
+        </div>
+    </template>
+
+    <!-- SCRIPTS -->
+    <script src="scripts/game_objects/player.js"></script>
+
+    <script src="scripts/game.js"></script>
+    <script src="scripts/input.js"></script>
+    <script src="scripts/engine.js"></script>
+    <script src="scripts/display.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
