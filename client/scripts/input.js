@@ -20,6 +20,9 @@ class Input {
 
     handleJoyStickUp(e) {
         this.isJoystickDown = false
+        this.xAxis = 0
+        this.yAxis = 0
+        this.sendInput()
         $("#joystick-dial").css("display", "none")
     }
 

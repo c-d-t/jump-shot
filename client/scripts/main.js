@@ -10,17 +10,20 @@ $(document).ready(() => {
 
     "use strict"
 
-    const socket = io.connect('192.168.2.10:3000')
+    const socket = io()
     let clientRoomID = 0
     let clientNickname = ''
-    let role = -1 // 0 = host, 1 = client
+
+    let hostRoomID = 0
+    let playerInputs = []
 
     /*************/
     /** OBJECTS **/
 
     // host
     const game = new Game()
-    const engine = new Engine(gameUpdate)
+    const engine = new Engine(30, init, update, render)
+    const renderer = new Renderer()
     const input = new Input(sendInput)
 
 
@@ -32,8 +35,19 @@ $(document).ready(() => {
      * It will be the function the engine will be calling
      * for every step
      */
-    function gameUpdate() {
-        
+    function init() {
+        renderer.start()
+    }
+
+    function update() {
+        game.update(playerInputs)
+    }
+
+    function render() {
+        renderer.drawBackground()
+        game.players.forEach(player => {
+            renderer.drawSquare(player.x, player.y, 40)
+        })
     }
 
     function sendInput() {
@@ -76,9 +90,20 @@ $(document).ready(() => {
             dataType: "json",
             success: function (response) {
                 display.switchScreen($("#host-lobby-screen-template"))
+                display.updatePlayerList([])
+                hostRoomID = response.roomID
                 $("#room-code").html("ID: " + response.roomID)
                 socket.emit("hostConnect", response.roomID)
+                socket.on("clientJoined", nickname => {
+                    game.addPlayer(nickname)
+                    display.updatePlayerList(game.players)
+                })
+                socket.on("clientLeft", nickname => {
+                    game.removePlayer(nickname)
+                    display.updatePlayerList(game.players)
+                })
                 socket.on("receiveInput", input => {
+                    playerInputs = input
                 })
             },
             error: function (error) {
@@ -115,6 +140,15 @@ $(document).ready(() => {
         })
     }
 
+    function onStartGame() {
+        if (game.players.length >= 1) {
+            display.switchScreen($("#host-game-screen-template"))
+            engine.start()    
+        } else {
+            display.errorMessage("You need at least 1 player")
+        }
+    }
+
     function onLeaveGame() {
 
     }
@@ -138,6 +172,23 @@ $(document).ready(() => {
         })
     }
 
+    function onLeaveHost() {
+        const data = {roomID: hostRoomID}
+        $.ajax({
+            type: "DELETE",
+            url: "http://localhost:3000/deleteRoom",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (response) {
+                display.switchScreen($("#main-menu-template"))
+            },
+            error: function (error) {
+                display.errorMessage(error.responseJSON.message)
+            }
+        })
+    }
+
 
     /****************/
     /** INITIALIZE **/
@@ -147,17 +198,8 @@ $(document).ready(() => {
     $(document).on("click", "#join-room-button",       joinRoomButtonClick)
     $(document).on("click", "#join-button",            onJoinRoom         )
     $(document).on("click", "#exit-controller-button", onLeaveController  )
+    $(document).on("click", "#exit-host-button",       onLeaveHost        )
+    $(document).on("click", "#start-game-button",      onStartGame        )
 
     onMainMenu()
-    
-    /*************/
-    /** SOCKETS **/
-
-    socket.on("clientJoined", nickname => {
-        game.addPlayer(nickname)
-    })
-
-    socket.on("clientLeft", nickname => {
-        game.removePlayer(nickname)
-    })
 })

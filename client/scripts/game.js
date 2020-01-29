@@ -4,26 +4,22 @@ class Game {
         this.players = []
     }
 
-    start() {
-
-    }
-
-    end() {
-
-    }
-
-    updatePlayerInput(player) {
-        
+    update(clientInputs) {
+        this.players.forEach(player => {
+            const clientInput = clientInputs.find(client => client.nickname == player.nickname)
+            if (clientInput != undefined) {
+                player.input(clientInput.input)
+            }
+        })
     }
 
     addPlayer(nickname) {
-        this.players.push(nickname)
-        display.updatePlayerList(this.players)
+        const newPlayer = new Player(nickname)
+        this.players.push(newPlayer)
     }
 
     removePlayer(nickname) {
-        const playerIndex = this.players.findIndex(client => client == nickname)
+        const playerIndex = this.players.findIndex(player => player.nickname == nickname)
         this.players.splice(playerIndex, 1)
-        display.updatePlayerList(this.players)
     }
 }

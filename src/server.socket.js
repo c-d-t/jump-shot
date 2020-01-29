@@ -1,4 +1,4 @@
-const { leaveRoom, sendInput, getRooms } = require("./rooms")
+const { leaveRoom, sendInput, getRooms, deleteRoom } = require("./rooms")
 
 exports.initSockets = io => {
     io.on("connect", socket => {
@@ -26,7 +26,12 @@ exports.initSockets = io => {
         })
 
         socket.on("sendInput", input => {
-            sendInput(socket.roomID, socket.nickname, input)
+            try {
+                sendInput(socket.roomID, socket.nickname, input)
+            }
+            catch(error) {
+                console.log(error)
+            }
         })
 
         socket.on("disconnect", () => {
@@ -34,8 +39,12 @@ exports.initSockets = io => {
                 return
             }
             try {
-                leaveRoom({nickname: socket.nickname, roomID: socket.roomID})
-                socket.in(socket.roomID).emit("clientLeft", socket.nickname)  
+                if (!socket.nickname) {
+                    deleteRoom(socket.roomID)
+                } else {
+                    leaveRoom({nickname: socket.nickname, roomID: socket.roomID})
+                    socket.in(socket.roomID).emit("clientLeft", socket.nickname)      
+                }
             }
             catch(error) {
                 console.log(error)

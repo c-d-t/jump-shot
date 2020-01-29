@@ -49,6 +49,12 @@ function joinRoom({nickname, roomID}) {
         throw new Error("Room is full")
     }
 
+    const foundClient = foundRoom.clients.find(client => client.nickname == nickname)
+
+    if (foundClient != undefined) {
+        throw new Error("That username is already taken")
+    }
+
     foundRoom.clients.push({
         nickname,
         input: {

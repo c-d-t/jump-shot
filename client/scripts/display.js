@@ -7,14 +7,14 @@ const display = {
     updatePlayerList: playerList => {
         if (playerList.length == 0) {
 
-            $("#player-list").html("No One Is Here ):")
+            $("#player-list").html("<li>No One Is Here ):</li>")
 
         } else {
 
             $("#player-list").html("")
             for (let i = 0; i < playerList.length; i++) {
                 const playerHTML = document.createElement("li")
-                playerHTML.innerHTML =  playerList[i]
+                playerHTML.innerHTML =  playerList[i].nickname
                 $("#player-list").append(playerHTML)
             }
 
