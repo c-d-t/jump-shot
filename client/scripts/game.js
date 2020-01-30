@@ -10,6 +10,9 @@ class Game {
             if (clientInput != undefined) {
                 player.input(clientInput.input)
             }
+
+            player.update()
+            console.log(player.y)
         })
     }
 

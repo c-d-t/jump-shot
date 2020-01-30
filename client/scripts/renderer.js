@@ -7,12 +7,12 @@ class Renderer {
     }
 
     drawBackground() {
-        this.context.fillStyle='rgb(0,0,0,0.2)';
+        this.context.fillStyle = 'rgb(0,0,0,0.2)';
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
     }
 
-    drawSquare(x, y, width) {
-        this.context.fillStyle='blue';
-        this.context.fillRect(Math.round(x), -Math.round(y), width, width)
+    drawSquare(x, y, width, color) {
+        this.context.fillStyle = color;
+        this.context.fillRect(Math.round(x), this.canvas.height - Math.round(y), width, width)
     }
 }

@@ -8,8 +8,8 @@ class Input {
 
     handleJoyStickDown(e) {
         this.isJoystickDown = true
-        this.xAxis = (e.pageX - window.innerWidth / 2) / 200
-        this.yAxis = (e.pageY - 300) / 200
+        this.xAxis = (e.pageX - window.innerWidth / 2) / 150
+        this.yAxis = (e.pageY - 350) / 150
         this.sendInput()
         $("#joystick-dial").css({
             display: "block",
@@ -28,8 +28,8 @@ class Input {
 
     handleJoyStick(e) {
         if (this.isJoystickDown) {
-            this.xAxis = (e.pageX - window.innerWidth / 2) / 200
-            this.yAxis = (300 - e.pageY) / 200
+            this.xAxis = (e.pageX - window.innerWidth / 2) / 150
+            this.yAxis = (350 - e.pageY) / 150
             if (this.xAxis > 1) {
                 this.xAxis = 1
             } else if (this.xAxis < -1) {

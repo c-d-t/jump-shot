@@ -46,7 +46,7 @@ $(document).ready(() => {
     function render() {
         renderer.drawBackground()
         game.players.forEach(player => {
-            renderer.drawSquare(player.x, player.y, 40)
+            renderer.drawSquare(player.x, player.y, 40, player.color)
         })
     }
 
