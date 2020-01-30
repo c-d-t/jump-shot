@@ -86,7 +86,7 @@ $(document).ready(() => {
     function onHostGame() {
         $.ajax({
             type: "POST",
-            url: "http://localhost:3000/createRoom",
+            url: "/createRoom",
             dataType: "json",
             success: function (response) {
                 display.switchScreen($("#host-lobby-screen-template"))
@@ -123,7 +123,7 @@ $(document).ready(() => {
         const data = { roomID, nickname }
         $.ajax({
             type: "POST",
-            url: "http://localhost:3000/joinRoom",
+            url: "/joinRoom",
             dataType: "json",
             contentType: "application/json",
             data: JSON.stringify(data),
@@ -157,7 +157,7 @@ $(document).ready(() => {
         const data = { roomID: clientRoomID, nickname: clientNickname }
         $.ajax({
             type: "POST",
-            url: "http://localhost:3000/leaveRoom",
+            url: "/leaveRoom",
             dataType: "json",
             contentType: "application/json",
             data: JSON.stringify(data),
@@ -176,7 +176,7 @@ $(document).ready(() => {
         const data = {roomID: hostRoomID}
         $.ajax({
             type: "DELETE",
-            url: "http://localhost:3000/deleteRoom",
+            url: "/deleteRoom",
             dataType: "json",
             contentType: "application/json",
             data: JSON.stringify(data),

@@ -95,6 +95,7 @@ function deleteRoom(roomID) {
 function sendInput(roomID, nickname, input) {
     const foundRoom = rooms.find(room => roomID == room.id)
 
+
     if (!foundRoom) {
         throw new Error("Room ID doesn't exist")
     }

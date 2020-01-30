@@ -18,7 +18,6 @@ router.post('/createRoom', (req, res) => {
         })
     }
     catch(error) {
-        console.log("hi")
         res.status(400).json({
             content: error
         })
