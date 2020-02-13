@@ -22,7 +22,7 @@ $(document).ready(() => {
 
     // host
     const game = new Game()
-    const engine = new Engine(20, init, update, render)
+    const engine = new Engine(30, init, update, render)
     const renderer = new Renderer()
     const input = new Input()
 
@@ -46,7 +46,7 @@ $(document).ready(() => {
     function render() {
         renderer.drawMap(game.map)
         game.players.forEach(player => {
-            renderer.drawSquare(player.x, player.y, 32, player.color)
+            renderer.drawSquare(player.x, player.y, player.width, player.color)
         })
     }
 
@@ -56,7 +56,6 @@ $(document).ready(() => {
 
         const inputObj = {}
         input.buttons.forEach(button => inputObj[button.name] = button.active)
-        console.log(inputObj)
         socket.emit("sendInput", inputObj)
     }
 

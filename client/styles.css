@@ -6,9 +6,11 @@
     margin: 0;
     font-family: 'Varela Round', Arial, Helvetica, sans-serif;
 }
+canvas {
+    touch-action: none;
+}
 body {
     background-color: rgb(255, 254, 249);
-    overflow: hidden;
 }
 footer {
     color: #fff;
@@ -173,4 +175,6 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     margin: 0 auto;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
+    width: 1024px;
+    height: 512px;
 }

@@ -13,11 +13,9 @@ class Game {
             1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 
             9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9, 
         ]
-        this.collisionMap = [
-            "oh", "no"
-        ]
         this.roomID = 0
         this.players = []
+        this.collider = new Collider()
     }
 
     update(clientInputs) {
@@ -28,6 +26,7 @@ class Game {
             }
 
             player.update()
+            this.collider.collisionCheck(player)
         })
     }
 

@@ -8,7 +8,6 @@ class Input {
     }
 
     handleInput(target_touches) {
-        console.log("hi")
         for (let buttonIndex = 0; buttonIndex < this.buttons.length; buttonIndex++) {
             const button = this.buttons[buttonIndex]
             button.active = false

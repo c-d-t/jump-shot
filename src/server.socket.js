@@ -30,7 +30,7 @@ exports.initSockets = io => {
                 sendInput(socket.roomID, socket.nickname, input)
             }
             catch(error) {
-                console.log(error)
+                console.log(error.message)
             }
         })
 
