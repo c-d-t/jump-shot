@@ -25,5 +25,16 @@ const display = {
         $("#error-message").html(error)
         $("#error-message").css("display", "block")
         $("#error-message").fadeOut(3000)
+    },
+
+    showVirtualController: buttons => {
+        const canvas = document.getElementById("virtual-controller")
+        const ctx = canvas.getContext('2d')
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+        buttons.forEach(button => {
+            ctx.fillStyle = button.color;
+            ctx.fillRect(button.x, button.y, button.width, button.height)
+        })
     }
 }

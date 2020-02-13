@@ -58,8 +58,9 @@ function joinRoom({nickname, roomID}) {
     foundRoom.clients.push({
         nickname,
         input: {
-            x: 0,
-            y: 0
+            left: false,
+            right: false,
+            jump: false
         }
     })
 }
@@ -97,7 +98,7 @@ function sendInput(roomID, nickname, input) {
 
 
     if (!foundRoom) {
-        throw new Error("Room ID doesn't exist")
+        throw new Error("Sending input to a non-existent room")
     }
 
     const foundClient = foundRoom.clients.find(client => client.nickname === nickname)

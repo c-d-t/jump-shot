@@ -22,9 +22,9 @@ $(document).ready(() => {
 
     // host
     const game = new Game()
-    const engine = new Engine(30, init, update, render)
+    const engine = new Engine(20, init, update, render)
     const renderer = new Renderer()
-    const input = new Input(sendInput)
+    const input = new Input()
 
 
     /***************/
@@ -44,40 +44,41 @@ $(document).ready(() => {
     }
 
     function render() {
-        renderer.drawBackground()
+        renderer.drawMap(game.map)
         game.players.forEach(player => {
-            renderer.drawSquare(player.x, player.y, 40, player.color)
+            renderer.drawSquare(player.x, player.y, 32, player.color)
         })
     }
 
-    function sendInput() {
-        socket.emit("sendInput", {
-            x: input.xAxis,
-            y: input.yAxis
-        })
+    function inputEvent(e) {
+        e.preventDefault()
+        input.handleInput(e.targetTouches)
+
+        const inputObj = {}
+        input.buttons.forEach(button => inputObj[button.name] = button.active)
+        console.log(inputObj)
+        socket.emit("sendInput", inputObj)
     }
 
     function addController() {
-        $(document).on("touchstart", "#joystick-container", e => input.handleJoyStickDown(e))
-        $(document).on("touchend", "#joystick-container",   e => input.handleJoyStickUp(e))
-        $(document).on("touchmove", "#joystick-container",  e => input.handleJoyStick(e))
-        $(document).on("mousedown", "#joystick-container",  e => input.handleJoyStickDown(e))
-        $(document).on("mouseup", "#joystick-container",    e => input.handleJoyStickUp(e))
-        $(document).on("mousemove", "#joystick-container",  e => input.handleJoyStick(e))
+        $(document).on("touchstart", inputEvent)
+        $(document).on("touchend",   inputEvent)
+        $(document).on("touchmove",  inputEvent)
     }
 
     function removeController() {
-        $(document).off("touchstart", e => input.handleJoyStickDown(e))
-        $(document).off("touchend",   e => input.handleJoyStickUp(e))
-        $(document).off("touchmove",  e => input.handleJoyStick(e))
-        $(document).off("mousedown",  e => input.handleJoyStickDown(e))
-        $(document).off("mouseup",    e => input.handleJoyStickUp(e))
-        $(document).off("mousemove",  e => input.handleJoyStick(e))
+        $(document).off("touchstart", inputEvent)
+        $(document).off("touchend",   inputEvent)
+        $(document).off("touchmove",  inputEvent)
     }
 
 
     /*******************/
     /** PAGE HANDLING **/
+
+    /**
+     * Theses are mainly calls to display and any functions to be called above
+     */
 
     function onMainMenu() {
         display.switchScreen($("#main-menu-template"))
@@ -132,6 +133,7 @@ $(document).ready(() => {
                 clientNickname = nickname
                 addController()
                 display.switchScreen($("#controller-template"))
+                display.showVirtualController(input.buttons)
                 socket.emit("joinRoom", {roomID, nickname})
             },
             error: function (error) {

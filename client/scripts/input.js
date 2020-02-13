@@ -1,50 +1,49 @@
 class Input {
-    constructor(sendInput) {
-        this.xAxis = 0
-        this.yAxis = 0
-        this.isJoystickDown = false
-        this.sendInput = sendInput
+    constructor() {
+        this.buttons = [
+            new Button("jump", 10, 10, 120, 120, "#f09000"),
+            new Button("left", 150, 10, 120, 120, "#0090f0"),
+            new Button("right", 290, 10, 120, 120, "#0090f0")
+        ]
     }
 
-    handleJoyStickDown(e) {
-        this.isJoystickDown = true
-        this.xAxis = (e.pageX - window.innerWidth / 2) / 150
-        this.yAxis = (e.pageY - 350) / 150
-        this.sendInput()
-        $("#joystick-dial").css({
-            display: "block",
-            top: e.pageY,
-            left: e.pageX
-        })
-    }
+    handleInput(target_touches) {
+        console.log("hi")
+        for (let buttonIndex = 0; buttonIndex < this.buttons.length; buttonIndex++) {
+            const button = this.buttons[buttonIndex]
+            button.active = false
 
-    handleJoyStickUp(e) {
-        this.isJoystickDown = false
-        this.xAxis = 0
-        this.yAxis = 0
-        this.sendInput()
-        $("#joystick-dial").css("display", "none")
-    }
+            for (let touchIndex = 0; touchIndex < target_touches.length; touchIndex++) {
+                const touch = target_touches[touchIndex]
 
-    handleJoyStick(e) {
-        if (this.isJoystickDown) {
-            this.xAxis = (e.pageX - window.innerWidth / 2) / 150
-            this.yAxis = (350 - e.pageY) / 150
-            if (this.xAxis > 1) {
-                this.xAxis = 1
-            } else if (this.xAxis < -1) {
-                this.xAxis = -1
+                if (button.isPressed({
+                    x: touch.clientX,
+                    y: touch.clientY
+                })) {
+                    button.active = true
+                    break
+                }
             }
-            if (this.yAxis > 1) {
-                this.yAxis = 1
-            } else if (this.yAxis < -1) {
-                this.yAxis = -1
-            }
-            this.sendInput()
-            $("#joystick-dial").css({
-                top: e.pageY,
-                left: e.pageX
-            })
         }
+    }
+}
+
+class Button {
+    constructor(name, x, y, width, height, color) {
+        this.name = name
+        this.active = false
+        this.x = x
+        this.y = y
+        this.width = width
+        this.height = height
+        this.color = color
+    }
+
+    isPressed({x, y}) {
+        if (x < this.x ||  x > this.x + this.width || y < this.y || y > this.y + this.height) {
+            return false
+        }
+
+        return true
     }
 }

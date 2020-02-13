@@ -47,7 +47,7 @@ exports.initSockets = io => {
                 }
             }
             catch(error) {
-                console.log(error)
+                console.log(error.message)
             }
         })
     })

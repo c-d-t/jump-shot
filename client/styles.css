@@ -116,7 +116,6 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     margin: 0;
 }
 #room-code {
-    font-family: 'Bangers';
     font-size: 2rem;
     position: absolute;
     top: 0;
@@ -171,5 +170,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 }
 #game-canvas {
     display: block;
-    margin: 1rem auto;
+    margin: 0 auto;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
 }
