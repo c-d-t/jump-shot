@@ -14,7 +14,7 @@ class Player {
     }
 
     update() {
-        this.velocityX *= 0.7
+        this.velocityX *= 0.8
         this.velocityY += 1
 
         this.old_x = this.x
@@ -50,7 +50,7 @@ class Player {
 
     jump() {
         this.grounded = false
-        this.velocityY = -13
+        this.velocityY = -10
     }
 
     shoot() {}

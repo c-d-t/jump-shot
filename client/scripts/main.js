@@ -46,7 +46,7 @@ $(document).ready(() => {
     function render() {
         renderer.drawMap(game.map)
         game.players.forEach(player => {
-            renderer.drawSquare(player.x, player.y, player.width, player.color)
+            renderer.drawPlayer(player.x, player.y, player.width, player.color)
         })
     }
 

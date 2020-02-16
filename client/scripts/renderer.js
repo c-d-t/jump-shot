@@ -29,8 +29,11 @@ class Renderer {
         })
     }
 
-    drawSquare(x, y, width, color) {
-        this.context.fillStyle = color;
-        this.context.fillRect(Math.round(x), Math.round(y), width, width)
+    drawPlayer(x, y, width, color) {
+        this.context.drawImage(
+            this.tilesheet,
+            0, 64, 8, 8, 
+            Math.round(x), Math.round(y), width, width
+        )
     }
 }

@@ -1,9 +1,9 @@
 class Input {
     constructor() {
         this.buttons = [
-            new Button("jump", 10, 10, 120, 120, "#f09000"),
-            new Button("left", 150, 10, 120, 120, "#0090f0"),
-            new Button("right", 290, 10, 120, 120, "#0090f0")
+            new Button("jump", 10, 300, 120, 120, "#f09000"),
+            new Button("left", 150, 300, 120, 120, "#0090f0"),
+            new Button("right", 290, 300, 120, 120, "#0090f0")
         ]
     }
 
